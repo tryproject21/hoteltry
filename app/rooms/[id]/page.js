@@ -1,10 +1,11 @@
 import BookingButton from "../../../components/BookingButton";
-import { rooms } from "../../../data/rooms";
+import { prisma } from "../../../lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const rooms = await prisma.room.findMany({ select: { id: true } });
   return rooms.map((room) => ({
     id: room.id,
   }));
@@ -12,11 +13,17 @@ export function generateStaticParams() {
 
 export default async function RoomDetail({ params }) {
   const { id } = await params;
-  const room = rooms.find((r) => r.id === id);
+  const room = await prisma.room.findUnique({
+    where: { id }
+  });
 
   if (!room) {
     notFound();
   }
+
+  // Parse JSON strings from SQLite
+  room.amenities = JSON.parse(room.amenities);
+  room.gallery = JSON.parse(room.gallery);
 
   return (
     <main style={{ padding: "100px 5% 5rem", backgroundColor: "var(--secondary-color)", minHeight: "100vh" }}>

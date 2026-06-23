@@ -1,22 +1,10 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { rooms } from "../data/rooms";
-import { useRouter } from "next/navigation";
-import { useBookingStore } from "../store/bookingStore";
+import { prisma } from "../lib/prisma";
+import SearchForm from "../components/SearchForm";
 
-export default function Home() {
-  const router = useRouter();
-  const { checkIn, checkOut, guests, setBookingDetails } = useBookingStore();
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!checkIn || !checkOut) {
-      alert("Mohon isi tanggal Check-in dan Check-out");
-      return;
-    }
-    document.getElementById("rooms")?.scrollIntoView({ behavior: "smooth" });
-  };
+export default async function Home() {
+  const rooms = await prisma.room.findMany();
 
   return (
     <main>
@@ -34,26 +22,7 @@ export default function Home() {
       </header>
 
       <section className="booking-form-section fade-in-up delay-3">
-        <form onSubmit={handleSearch} className="floating-form">
-            <div className="form-group">
-                <label>Check-in</label>
-                <input type="date" value={checkIn} onChange={(e) => setBookingDetails({ checkIn: e.target.value })} required />
-            </div>
-            <div className="form-group">
-                <label>Check-out</label>
-                <input type="date" value={checkOut} onChange={(e) => setBookingDetails({ checkOut: e.target.value })} required />
-            </div>
-            <div className="form-group">
-                <label>Jumlah Tamu</label>
-                <select value={guests} onChange={(e) => setBookingDetails({ guests: Number(e.target.value) })}>
-                    <option value={1}>1 Orang</option>
-                    <option value={2}>2 Orang</option>
-                    <option value={3}>3 Orang</option>
-                    <option value={4}>4 Orang</option>
-                </select>
-            </div>
-            <button type="submit" className="btn-primary" style={{ height: "56px", padding: "0 3rem" }}>Cari Ketersediaan</button>
-        </form>
+        <SearchForm />
       </section>
 
       <section id="rooms" className="rooms-section">
@@ -84,15 +53,15 @@ export default function Home() {
               <p>Nikmati layanan berkelas internasional untuk menyempurnakan masa inap Anda.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "2.5rem", maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-              <div className="fade-in-up delay-1" style={{ padding: "3rem 2rem", backgroundColor: "var(--white)", borderRadius: "24px", boxShadow: "var(--shadow)", transition: "var(--transition)" }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-10px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div className="fade-in-up delay-1" style={{ padding: "3rem 2rem", backgroundColor: "var(--white)", borderRadius: "24px", boxShadow: "var(--shadow)", transition: "var(--transition)" }}>
                   <h3 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>🏊 Kolam Renang Infinity</h3>
                   <p style={{ color: "var(--text-light)", fontSize: "1rem" }}>Kolam renang luas dengan pemandangan cakrawala kota yang menakjubkan.</p>
               </div>
-              <div className="fade-in-up delay-2" style={{ padding: "3rem 2rem", backgroundColor: "var(--white)", borderRadius: "24px", boxShadow: "var(--shadow)", transition: "var(--transition)" }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-10px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div className="fade-in-up delay-2" style={{ padding: "3rem 2rem", backgroundColor: "var(--white)", borderRadius: "24px", boxShadow: "var(--shadow)", transition: "var(--transition)" }}>
                   <h3 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>🍽️ Fine Dining</h3>
                   <p style={{ color: "var(--text-light)", fontSize: "1rem" }}>Sajian hidangan *gourmet* internasional oleh chef berbintang Michelin.</p>
               </div>
-              <div className="fade-in-up delay-3" style={{ padding: "3rem 2rem", backgroundColor: "var(--white)", borderRadius: "24px", boxShadow: "var(--shadow)", transition: "var(--transition)" }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-10px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
+              <div className="fade-in-up delay-3" style={{ padding: "3rem 2rem", backgroundColor: "var(--white)", borderRadius: "24px", boxShadow: "var(--shadow)", transition: "var(--transition)" }}>
                   <h3 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>💆 Spa & Relaksasi</h3>
                   <p style={{ color: "var(--text-light)", fontSize: "1rem" }}>Perawatan tubuh mewah dan aromaterapi untuk memanjakan diri Anda.</p>
               </div>

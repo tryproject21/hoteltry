@@ -2,25 +2,43 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useBookingStore } from "../../store/bookingStore";
-import { rooms } from "../../data/rooms";
 
 export default function Checkout() {
     const router = useRouter();
     const { checkIn, checkOut, guests, selectedRoomId } = useBookingStore();
     const [loading, setLoading] = useState(false);
+    const [room, setRoom] = useState(null);
+    const [fetchingRoom, setFetchingRoom] = useState(true);
     
     const [guestName, setGuestName] = useState("");
     const [guestEmail, setGuestEmail] = useState("");
     const [guestPhone, setGuestPhone] = useState("");
 
-    const room = rooms.find(r => r.id === selectedRoomId);
-
     useEffect(() => {
         if (!selectedRoomId) {
             router.push("/");
+            return;
         }
+
+        fetch(`/api/rooms?id=${selectedRoomId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Kamar tidak ditemukan");
+                    router.push("/");
+                } else {
+                    setRoom(data);
+                }
+                setFetchingRoom(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setFetchingRoom(false);
+                router.push("/");
+            });
     }, [selectedRoomId, router]);
 
+    if (fetchingRoom) return <main style={{ padding: "120px 5%", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}><h2>Memuat detail pemesanan...</h2></main>;
     if (!room) return null;
 
     // Calculate days and total price
