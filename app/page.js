@@ -1,15 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { rooms } from "../data/rooms";
 import { useRouter } from "next/navigation";
+import { useBookingStore } from "../store/bookingStore";
 
 export default function Home() {
   const router = useRouter();
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(1);
+  const { checkIn, checkOut, guests, setBookingDetails } = useBookingStore();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -22,7 +20,6 @@ export default function Home() {
 
   return (
     <main>
-      {/* Hero Section */}
       <header id="home" className="hero">
         <div className="hero-content">
           <h1>Kenyamanan Sempurna, <br />Pengalaman Luar Biasa</h1>
@@ -34,20 +31,19 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Booking Form Section */}
       <section className="booking-form-section" style={{ padding: "2rem 5%", backgroundColor: "var(--white)", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
         <form onSubmit={handleSearch} style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center", alignItems: "flex-end", maxWidth: "1000px", margin: "0 auto", backgroundColor: "var(--secondary-color)", padding: "2rem", borderRadius: "15px", boxShadow: "var(--shadow)" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1, minWidth: "200px" }}>
                 <label style={{ fontWeight: 600, fontSize: "0.9rem" }}>Check-in</label>
-                <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} style={{ padding: "0.8rem", border: "1px solid #ddd", borderRadius: "8px", fontFamily: "inherit" }} required />
+                <input type="date" value={checkIn} onChange={(e) => setBookingDetails({ checkIn: e.target.value })} style={{ padding: "0.8rem", border: "1px solid #ddd", borderRadius: "8px", fontFamily: "inherit" }} required />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1, minWidth: "200px" }}>
                 <label style={{ fontWeight: 600, fontSize: "0.9rem" }}>Check-out</label>
-                <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} style={{ padding: "0.8rem", border: "1px solid #ddd", borderRadius: "8px", fontFamily: "inherit" }} required />
+                <input type="date" value={checkOut} onChange={(e) => setBookingDetails({ checkOut: e.target.value })} style={{ padding: "0.8rem", border: "1px solid #ddd", borderRadius: "8px", fontFamily: "inherit" }} required />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1, minWidth: "200px" }}>
                 <label style={{ fontWeight: 600, fontSize: "0.9rem" }}>Tamu</label>
-                <select value={guests} onChange={(e) => setGuests(Number(e.target.value))} style={{ padding: "0.8rem", border: "1px solid #ddd", borderRadius: "8px", fontFamily: "inherit" }}>
+                <select value={guests} onChange={(e) => setBookingDetails({ guests: Number(e.target.value) })} style={{ padding: "0.8rem", border: "1px solid #ddd", borderRadius: "8px", fontFamily: "inherit" }}>
                     <option value={1}>1 Orang</option>
                     <option value={2}>2 Orang</option>
                     <option value={3}>3 Orang</option>
@@ -58,7 +54,6 @@ export default function Home() {
         </form>
       </section>
 
-      {/* Room Types Section */}
       <section id="rooms" className="rooms-section">
         <div className="section-header">
           <h2>Tipe Kamar</h2>
@@ -81,7 +76,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Amenities Section */}
       <section id="amenities" style={{ padding: "6rem 5%", backgroundColor: "var(--secondary-color)" }}>
           <div className="section-header">
               <h2>Fasilitas Hotel</h2>
@@ -107,7 +101,6 @@ export default function Home() {
           </div>
       </section>
 
-      {/* Gallery Section */}
       <section id="gallery" className="gallery-section">
         <div className="section-header">
           <h2>Galeri Kami</h2>

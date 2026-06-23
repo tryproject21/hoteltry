@@ -1,3 +1,4 @@
+import BookingButton from "../../../components/BookingButton";
 import { rooms } from "../../../data/rooms";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,9 +63,7 @@ export default async function RoomDetail({ params }) {
                     </div>
                     <p style={{ color: "var(--text-light)", marginBottom: "2rem" }}>Termasuk pajak & biaya layanan.</p>
                     
-                    <Link href="/checkout" className="btn-primary" style={{ display: "block", textAlign: "center", width: "100%", padding: "1rem", fontSize: "1.1rem", textDecoration: "none" }}>
-                        Pesan Sekarang
-                    </Link>
+                    <BookingButton roomId={room.id} />
                 </div>
             </div>
         </div>
