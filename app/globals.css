@@ -320,3 +320,12 @@ footer p {
 .navbar.scrolled { padding: 1rem 5%; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
 .navbar a { text-decoration: none; }
 .btn-primary { text-decoration: none; display: inline-block; text-align: center; }
+
+@media print {
+    .no-print { display: none !important; }
+    .invoice-container { padding: 0 !important; background: white !important; }
+    .invoice-box { box-shadow: none !important; margin: 0 !important; width: 100% !important; max-width: none !important; padding: 0 !important; }
+    .navbar { display: none !important; }
+    footer { display: none !important; }
+    body { background-color: white !important; }
+}

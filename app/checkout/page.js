@@ -49,8 +49,9 @@ export default function Checkout() {
                 })
             });
 
+            const data = await res.json();
             if (res.ok) {
-                router.push("/success");
+                router.push(`/success/${data.booking.id}`);
             } else {
                 alert("Terjadi kesalahan saat memproses pesanan.");
                 setLoading(false);

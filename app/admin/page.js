@@ -7,7 +7,7 @@ export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
   
   if (!session) {
-    redirect("/api/auth/signin");
+    redirect("/api/auth/signin?callbackUrl=/admin");
   }
 
   const bookings = await prisma.booking.findMany({
